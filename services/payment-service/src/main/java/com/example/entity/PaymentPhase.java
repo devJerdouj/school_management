@@ -50,6 +50,12 @@ public class PaymentPhase {
     @ToString.Exclude
     private List<Payment> payments ;
 
+    public void markAsPaid(){
+        this.setRemainingAmount(0.0);
+        this.setPaymentDate(LocalDate.now());
+        this.setIsPaid(true);
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

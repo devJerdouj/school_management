@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class PaymentRequest {
     private Long studentId;
-    private Long paymentPhaseId;
     private Double amount;
     private PaymentMethod paymentMethod;
 }
