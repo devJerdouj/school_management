@@ -5,3 +5,4 @@ spring:
     name: student-service
   profiles:
     active: dev
+
