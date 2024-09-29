@@ -40,7 +40,7 @@ public class PaymentPhase {
     private Boolean isPaid = false;
 
     @Column(name = "remaining_amount", nullable = false)
-    private Double remainingAmount;
+    private Double remainingAmount = amountDue;
 
     @Column(name = "payment_date", nullable = true)
     private LocalDate paymentDate;
@@ -49,12 +49,6 @@ public class PaymentPhase {
     @OneToMany(fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Payment> payments ;
-
-    public void markAsPaid(){
-        this.setRemainingAmount(0.0);
-        this.setPaymentDate(LocalDate.now());
-        this.setIsPaid(true);
-    }
 
     @Override
     public final boolean equals(Object o) {

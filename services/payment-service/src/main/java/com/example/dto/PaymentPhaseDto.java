@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 public class PaymentPhaseDto {
 
-    private Long paymentPhaseId;
+    private Long studentId;
     private Double amountDue;
     private LocalDate dueDate;
     private Boolean isPaid;

@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,13 +20,15 @@ import java.util.Objects;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "payment_id")
+    private Long paymentId;
 
-    @JoinColumn(name = "student_id", nullable = false)
+    @Column(name = "student_id")
     private Long studentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_phase_id", nullable = false)
+    @ToString.Exclude
     private PaymentPhase paymentPhase;
 
     @Column(name = "payment_date", nullable = false)
@@ -54,7 +57,7 @@ public class Payment {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Payment payment = (Payment) o;
-        return getId() != null && Objects.equals(getId(), payment.getId());
+        return getPaymentId() != null && Objects.equals(getPaymentId(), payment.getPaymentId());
     }
 
     @Override

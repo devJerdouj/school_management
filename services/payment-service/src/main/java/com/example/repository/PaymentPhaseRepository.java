@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PaymentPhaseRepository extends JpaRepository<PaymentPhase, Long> {
 
-    Optional<PaymentPhase> findByStudentIdAndIsPaidFalseOrderByDueDateAsc(Long id);
+    Optional<PaymentPhase> findFirstByStudentIdAndIsPaidFalseOrderByDueDateAsc(Long id);
     Optional<List<PaymentPhase>> findAllByStudentIdOrderByDueDateAsc(Long id);
 
 }
