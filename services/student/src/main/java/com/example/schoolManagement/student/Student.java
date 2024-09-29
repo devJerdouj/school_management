@@ -56,6 +56,9 @@ public class Student {
     @Column(name = "updated_at")
     private Date updateAt ;
 
+    @Column(name = "payment_plan_id")
+    private Long paymentPlanId;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="responsible_id")
