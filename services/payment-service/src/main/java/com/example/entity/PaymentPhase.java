@@ -39,6 +39,9 @@ public class PaymentPhase {
     @Column(name = "is_paid", nullable = false)
     private Boolean isPaid = false;
 
+    @Column(name = "remaining_amount", nullable = false)
+    private Double remainingAmount;
+
     @Column(name = "payment_date", nullable = true)
     private LocalDate paymentDate;
 

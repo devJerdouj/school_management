@@ -21,7 +21,6 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @JoinColumn(name = "student_id", nullable = false)
     private Long studentId;
 

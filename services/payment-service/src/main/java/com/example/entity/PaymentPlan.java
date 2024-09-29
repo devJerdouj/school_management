@@ -30,7 +30,6 @@ public class PaymentPlan {
     @ToString.Exclude
     private List<PaymentPhase> paymentPhases;
 
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
