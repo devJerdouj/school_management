@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.entity.PaymentPlan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ public class PaymentPhaseDto {
 
     private Long studentId;
     private Double amountDue;
+    private Long paymentPlanId;
     private LocalDate dueDate;
     private Boolean isPaid;
-    private LocalDate paymentDate;
 }
