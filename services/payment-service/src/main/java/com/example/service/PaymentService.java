@@ -83,7 +83,10 @@ public class PaymentService {
         if(paymentPhase.getRemainingAmount()==0){
             paymentPhase.setIsPaid(true);
         }
-        paymentPhaseRepository.save(paymentPhase);
+
+        Long paymentPlanId = paymentPhase.getPaymentPlan().getPaymentPlanId();
+        PaymentPhaseDto dto = PaymentPhaseMapper.toDto(paymentPhase);
+        paymentPhaseService.updatePaymentPhase(paymentPlanId, dto);
 
         return payment;
     }
