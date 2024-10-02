@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,7 +19,8 @@ import java.util.Objects;
 public class PaymentPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "payment_plan_id")
+    private Long paymentPlanId;
 
     @Column(name = "annual_cost", nullable = false)
     private Double annualCost;
@@ -29,6 +31,9 @@ public class PaymentPlan {
     @OneToMany(mappedBy = "paymentPlan", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<PaymentPhase> paymentPhases;
+
+    @Column(name = "scholarship_year")
+    private Integer scholarshipYear;
 
     @Override
     public final boolean equals(Object o) {

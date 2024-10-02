@@ -7,6 +7,8 @@ import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
 import com.example.entity.PaymentStatus;
 import com.example.exception.ResourceNotFoundException;
+import com.example.mapper.PaymentMapper;
+import com.example.mapper.PaymentPhaseMapper;
 import com.example.repository.PaymentPhaseRepository;
 import com.example.repository.PaymentPlanRepository;
 import com.example.repository.PaymentRepository;
@@ -20,8 +22,7 @@ public class PaymentService {
 
     private final PaymentPlanRepository paymentPlanRepository;
     private PaymentRepository paymentRepository;
-
-    private PaymentPhaseRepository paymentPhaseRepository;
+    private PaymentPhaseService paymentPhaseService;
 
     public PaymentService(PaymentPlanRepository paymentPlanRepository) {
         this.paymentPlanRepository = paymentPlanRepository;
@@ -32,9 +33,11 @@ public class PaymentService {
 
         Long studentId = paymentRequest.getStudentId(); ;
 
-        PaymentPhase unpaidPhase = paymentPhaseRepository.findFirstByStudentIdAndIsPaidFalseOrderByDueDateAsc(studentId)
-            .orElseThrow(() -> new IllegalArgumentException("No unpaid payment phases found for the student"));
-
+        PaymentPhaseDto nextUnpaidPaymentPhaseByStudentId =
+                paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
+        PaymentPlan paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhaseByStudentId.getPaymentPlanId()).get();
+        PaymentPhase unpaidPhase = PaymentPhaseMapper.toEntity(
+                        nextUnpaidPaymentPhaseByStudentId, paymentPlan);
         Double amountToPay = paymentRequest.getAmount();
 
         while (amountToPay > 0 && unpaidPhase != null) {
@@ -56,12 +59,13 @@ public class PaymentService {
 
                 amountToPay = 0.0;
             }
-            unpaidPhase = paymentPhaseRepository.save(unpaidPhase);
+            paymentPhaseService.updatePaymentPhase(unpaidPhase.getPaymentPhaseId(),
+                    PaymentPhaseMapper.toDto(unpaidPhase));
 
 
             if (amountToPay > 0) {
-                unpaidPhase = paymentPhaseRepository.findFirstByStudentIdAndIsPaidFalseOrderByDueDateAsc(studentId)
-                        .orElseThrow(() -> new IllegalArgumentException("No unpaid payment phases found for the student"));;
+                unpaidPhase = PaymentPhaseMapper.toEntity(
+                        nextUnpaidPaymentPhaseByStudentId, paymentPlan);
             }
         }
 
@@ -80,24 +84,21 @@ public class PaymentService {
         if(paymentPhase.getRemainingAmount()==0){
             paymentPhase.setIsPaid(true);
         }
-        paymentPhaseRepository.save(paymentPhase);
+
+        Long paymentPlanId = paymentPhase.getPaymentPlan().getPaymentPlanId();
+        PaymentPhaseDto dto = PaymentPhaseMapper.toDto(paymentPhase);
+        paymentPhaseService.updatePaymentPhase(paymentPlanId, dto);
 
         return payment;
     }
 
-    public void createPaymentPhases(Long studentId, Long paymentPlanId){
-        PaymentPlan paymentPlan = paymentPlanRepository.findById(paymentPlanId).get();
-        Integer numberOfPhases = paymentPlan.getNumberOfPhases();
-        Double annualCost = paymentPlan.getAnnualCost();
-        for (int i = 0; i < numberOfPhases; i++) {
-            PaymentPhaseDto paymentPhaseDto =
-                    new PaymentPhaseDto(studentId, annualCost / numberOfPhases,
-                            LocalDate.of(2024, 1,1).plusMonths(((long) i * (int)(9/numberOfPhases)))
-                            ,false,null);
-
-            paymentPhaseRepository.save(mapper.topaymentPhase(paymentPhaseDto));
-        }
+    public List<PaymentRequest> getPaymentsByStudentId(Long studentId) {
+        List<Payment> payments = paymentRepository.findAllByStudentIdOrderByPaymentDateDesc(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("No payments found for this student"));
+        return PaymentMapper.toDtoList(payments);
     }
+
+
 
 
 

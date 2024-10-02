@@ -21,7 +21,8 @@ public class PaymentPhase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "payment_phase_id")
+    private Long paymentPhaseId;
 
     @ManyToOne
     @JoinColumn(name = "payment_plan_id", nullable = false)
@@ -58,7 +59,7 @@ public class PaymentPhase {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         PaymentPhase that = (PaymentPhase) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        return getPaymentPhaseId() != null && Objects.equals(getPaymentPhaseId(), that.getPaymentPhaseId());
     }
 
     @Override
