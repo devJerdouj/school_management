@@ -53,8 +53,6 @@ public class PaymentPhaseService {
         return PaymentPhaseMapper.toDto(nextUnpaidPhase);
     }
 
-
-
     public List<PaymentPhaseDto> getUnpaidPaymentPhasesByStudentId(Long studentId) {
         List<PaymentPhase> unpaidPhases = paymentPhaseRepository.findAllByStudentIdAndIsPaidFalseOrderByDueDateAsc(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("No unpaid payment phases found for this student"));

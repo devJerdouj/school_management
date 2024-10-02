@@ -7,6 +7,7 @@ import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
 import com.example.entity.PaymentStatus;
 import com.example.exception.ResourceNotFoundException;
+import com.example.mapper.PaymentMapper;
 import com.example.mapper.PaymentPhaseMapper;
 import com.example.repository.PaymentPhaseRepository;
 import com.example.repository.PaymentPlanRepository;
@@ -90,6 +91,13 @@ public class PaymentService {
 
         return payment;
     }
+
+    public List<PaymentRequest> getPaymentsByStudentId(Long studentId) {
+        List<Payment> payments = paymentRepository.findAllByStudentIdOrderByPaymentDateDesc(studentId)
+                .orElseThrow(() -> new ResourceNotFoundException("No payments found for this student"));
+        return PaymentMapper.toDtoList(payments);
+    }
+
 
 
 
