@@ -1,2 +1,6 @@
-package com.example.schoolManagement.level;public record LevelResponse() {
+package com.example.schoolManagement.level;
+public record LevelResponse(
+        Long id,
+        String name
+) {
 }

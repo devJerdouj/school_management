@@ -1,11 +1,17 @@
 package com.example.schoolManagement.responsible;
 import com.example.schoolManagement.student.Student;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "responsibles")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Responsible {
 
     @Id

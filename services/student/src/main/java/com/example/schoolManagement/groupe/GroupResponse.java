@@ -1,2 +1,7 @@
-package com.example.schoolManagement.groupe;public record GroupResponse() {
+package com.example.schoolManagement.groupe;
+
+public record GroupResponse(
+        Long id,
+        String name
+) {
 }
