@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import com.example.schoolManagement.level.Level;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -38,7 +39,7 @@ public class Student {
     private String numberPhone;
 
     @Column(name="birth_date")
-    private Date birthDate ;
+    private LocalDate birthDate ;
 
     @ManyToOne
     @JoinColumn(name="level_id")

@@ -16,7 +16,7 @@ public class StudentController {
     private final StudentService studentService ;
 
     @PostMapping()
-    public ResponseEntity<Integer> createStudent(
+    public ResponseEntity<Long> createStudent(
             @RequestBody @Valid  StudentRequest request
     ){
         return ResponseEntity.ok(studentService.createStudent(request));
@@ -24,14 +24,14 @@ public class StudentController {
 
     @GetMapping("/{student-id}")
     public ResponseEntity<StudentResponse> findById(
-            @PathVariable("student-id") Integer studentId
+            @PathVariable("student-id") Long studentId
     ){
-        return ResponseEntity.ok(StudentService.findById(studentId));
+        return ResponseEntity.ok(studentService.findById(studentId));
     }
 
     @GetMapping()
     public ResponseEntity<List<StudentResponse>> findAll(){
-        return ResponseEntity.ok(StudentService.findAll());
+        return ResponseEntity.ok(studentService.findAll());
     }
 
 }
