@@ -4,39 +4,60 @@ import com.example.schoolManagement.groupe.Group;
 import com.example.schoolManagement.level.Level;
 import com.example.schoolManagement.responsible.Responsible;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public record StudentRequest() {
+public record StudentRequest(
 
 
-    private Long id ;
+        @NotNull(message = "Student ID is required for update")
+        Long id ,
+
+        @NotBlank(message = "Student first name is required")
+        @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+        String firstName ,
 
 
-    private String firstName ;
+        @NotBlank(message = "Student last name is required")
+        @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
+        String lastName ,
 
 
-    private String lastName ;
+        @NotBlank(message = "Student email is required")
+        @Email(message = "Please provide a valid email address")
+        String email ,
 
-    private String email ;
+        @NotBlank(message = "Student code is required")
+        @Pattern(regexp = "^[A-Za-z0-9]{6,10}$", message = "Code must be alphanumeric and between 6 and 10 characters")
+        String code ,
+
+        @NotBlank(message = "Student address is required")
+        @Size(min = 10, max = 100, message = "Address must be between 10 and 100 characters")
+        String address,
+
+        @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number must be a valid format and between 10 and 15 digits")
+        String numberPhone,
+
+        @NotNull(message = "Student birthDate is required")
+        @Past(message = "BirthDate must be in the past")
+        LocalDate birthDate ,
+
+        @NotNull(message = "Student level ID is required")
+        Long levelId, // Réception de l'ID du Level
+
+        @NotNull(message = "Student group ID is required")
+        Long groupId, // Réception de l'ID du Group
+
+        @NotNull(message = "Student responsible ID is required")
+        Long responsibleId , // Réception de l'ID du Responsible
+
+        @NotNull(message = "Student paymentPlan ID is required")
+        Long paymentPlanId
+) {
 
 
-    private String code ;
 
-    private String address;
-
-    private String numberPhone;
-
-
-    private Date birthDate ;
-
-
-    private Level level ;
-
-
-    private Group group ;
-
-
-    private Responsible responsible;
 
 }
