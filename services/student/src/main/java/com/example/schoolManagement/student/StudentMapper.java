@@ -2,6 +2,7 @@ package com.example.schoolManagement.student;
 
 
 import com.example.schoolManagement.groupe.Group;
+import com.example.schoolManagement.groupe.GroupMapper;
 import com.example.schoolManagement.groupe.GroupResponse;
 import com.example.schoolManagement.level.Level;
 import com.example.schoolManagement.level.LevelResponse;
@@ -11,6 +12,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StudentMapper {
+
+    private final GroupMapper groupMapper;
+
+    public StudentMapper(GroupMapper groupMapper) {
+        this.groupMapper = groupMapper;
+    }
     public Student toStudent(StudentRequest request) {
        return  Student.builder()
                .id(request.id())
@@ -39,8 +46,8 @@ public class StudentMapper {
                 student.getNumberPhone(),
                 student.getBirthDate(),
                 student.getPaymentPlanId(),
-                new LevelResponse(student.getLevel().getId(), student.getLevel().getName()),
-                new GroupResponse(student.getGroup().getId(), student.getGroup().getName()),
+                new LevelResponse(student.getLevel().getId(), student.getLevel().getName(),student.getLevel().getTotalCost(),groupMapper.toGroupResponseSet(student.getLevel().getGroups())),
+                new GroupResponse(student.getGroup().getId(), student.getGroup().getName(),student.getGroup().getStudentsNumber(),student.getGroup().getGroupCapacity()),
                 new ResponsibleResponse(student.getResponsible().getId(), student.getResponsible().getFirstName(), student.getResponsible().getLastName(), student.getResponsible().getPhoneNumber())
         );
 
