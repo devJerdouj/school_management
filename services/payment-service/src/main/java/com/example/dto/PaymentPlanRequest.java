@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class PaymentPlanRequest {
+    private Long paymentPlanId;
     private Double annualCost;
     private Integer numberOfPhases;
 }

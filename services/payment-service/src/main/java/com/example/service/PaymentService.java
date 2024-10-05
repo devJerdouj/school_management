@@ -9,7 +9,6 @@ import com.example.entity.PaymentStatus;
 import com.example.exception.ResourceNotFoundException;
 import com.example.mapper.PaymentMapper;
 import com.example.mapper.PaymentPhaseMapper;
-import com.example.repository.PaymentPhaseRepository;
 import com.example.repository.PaymentPlanRepository;
 import com.example.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
@@ -33,11 +32,11 @@ public class PaymentService {
 
         Long studentId = paymentRequest.getStudentId(); ;
 
-        PaymentPhaseDto nextUnpaidPaymentPhaseByStudentId =
+        PaymentPhaseDto nextUnpaidPaymentPhase =
                 paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
-        PaymentPlan paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhaseByStudentId.getPaymentPlanId()).get();
+        PaymentPlan paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhase.getPaymentPlanId()).get();
         PaymentPhase unpaidPhase = PaymentPhaseMapper.toEntity(
-                        nextUnpaidPaymentPhaseByStudentId, paymentPlan);
+                nextUnpaidPaymentPhase, paymentPlan);
         Double amountToPay = paymentRequest.getAmount();
 
         while (amountToPay > 0 && unpaidPhase != null) {
@@ -65,7 +64,7 @@ public class PaymentService {
 
             if (amountToPay > 0) {
                 unpaidPhase = PaymentPhaseMapper.toEntity(
-                        nextUnpaidPaymentPhaseByStudentId, paymentPlan);
+                        nextUnpaidPaymentPhase, paymentPlan);
             }
         }
 
@@ -78,13 +77,10 @@ public class PaymentService {
 
         payment.setPaymentStatus(PaymentStatus.VALIDATED);
         paymentRepository.save(payment);
-
-
         PaymentPhase paymentPhase = payment.getPaymentPhase();
         if(paymentPhase.getRemainingAmount()==0){
             paymentPhase.setIsPaid(true);
         }
-
         Long paymentPlanId = paymentPhase.getPaymentPlan().getPaymentPlanId();
         PaymentPhaseDto dto = PaymentPhaseMapper.toDto(paymentPhase);
         paymentPhaseService.updatePaymentPhase(paymentPlanId, dto);
