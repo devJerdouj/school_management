@@ -17,9 +17,9 @@ public class StudentController {
 
     @PostMapping()
     public ResponseEntity<Long> createStudent(
-            @RequestBody @Valid  StudentRequest request
+            @RequestBody @Valid  StudentRequest request , Long phasesNumber
     ){
-        return ResponseEntity.ok(studentService.createStudent(request));
+        return ResponseEntity.ok(studentService.createStudent(request,phasesNumber));
     }
 
     @GetMapping("/{student-id}")

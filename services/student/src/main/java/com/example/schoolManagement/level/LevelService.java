@@ -1,7 +1,11 @@
 package com.example.schoolManagement.level;
 
 import com.example.schoolManagement.groupe.GroupMapper;
+import com.example.schoolManagement.student.Student;
+import com.example.schoolManagement.student.StudentResponse;
+import com.example.schoolManagement.student.StudentService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,17 +13,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class LevelService {
 
     private final LevelRepository levelRepository;
     private final LevelMapper levelMapper;
     private final GroupMapper groupMapper;
+    private LevelService levelService;
+    private StudentService studentService;
 
-    public LevelService(LevelRepository levelRepository, LevelMapper levelMapper, GroupMapper groupMapper) {
-        this.levelRepository = levelRepository;
-        this.levelMapper = levelMapper;
-        this.groupMapper = groupMapper;
-    }
 
 
     @Transactional
@@ -79,4 +81,15 @@ public class LevelService {
                 .map(levelMapper::toLevelResponse)
                 .collect(Collectors.toList());
     }
+
+    public double getAmountByStudentLevel(Long studentId) {
+
+        StudentResponse studentResponse = studentService.findById(studentId);
+
+        LevelResponse levelResponse= studentResponse.level();
+
+        return levelResponse.totalCost();
+    }
+
+
 }
