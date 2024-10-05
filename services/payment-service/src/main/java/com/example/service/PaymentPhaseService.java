@@ -21,13 +21,13 @@ public class PaymentPhaseService {
     private PaymentPlanRepository paymentPlanRepository;
     private PaymentPhaseRepository paymentPhaseRepository;
 
-    public void createPaymentPhases(Long studentId, Long paymentPlanId){
+    public void generatePaymentPhases(Long studentId, Long paymentPlanId){
         PaymentPlan paymentPlan = paymentPlanRepository.findById(paymentPlanId).get();
         Integer numberOfPhases = paymentPlan.getNumberOfPhases();
         Double annualCost = paymentPlan.getAnnualCost();
         for (int i = 0; i < numberOfPhases; i++) {
             PaymentPhaseDto paymentPhaseDto =
-                    new PaymentPhaseDto(studentId, annualCost / numberOfPhases,
+                    new PaymentPhaseDto(null ,studentId, annualCost / numberOfPhases,
                             paymentPlanId, LocalDate.of(2024, 1,1).plusMonths(((long) i * (int)(9/numberOfPhases)))
                             ,false);
 
