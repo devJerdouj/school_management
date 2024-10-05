@@ -1,7 +1,10 @@
 package com.example.service;
 
+import com.example.client.StudentServiceClient;
+import com.example.config.WebClientConfig;
 import com.example.dto.PaymentPhaseDto;
 import com.example.dto.PaymentRequest;
+import com.example.dto.StudentDto;
 import com.example.entity.Payment;
 import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
@@ -11,26 +14,33 @@ import com.example.mapper.PaymentMapper;
 import com.example.mapper.PaymentPhaseMapper;
 import com.example.repository.PaymentPlanRepository;
 import com.example.repository.PaymentRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class PaymentService {
 
-    private final PaymentPlanRepository paymentPlanRepository;
+    private  PaymentPlanRepository paymentPlanRepository;
     private PaymentRepository paymentRepository;
     private PaymentPhaseService paymentPhaseService;
-
-    public PaymentService(PaymentPlanRepository paymentPlanRepository) {
-        this.paymentPlanRepository = paymentPlanRepository;
-    }
+    private WebClient webClient;
+    private StudentServiceClient studentServiceClient;
 
 
     public void createPayment(PaymentRequest paymentRequest) {
 
-        Long studentId = paymentRequest.getStudentId(); ;
+        Long studentId = paymentRequest.getStudentId();
+        if(!studentServiceClient.checkStudentValidity(studentId)){
+            return;
+        }
 
         PaymentPhaseDto nextUnpaidPaymentPhase =
                 paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
