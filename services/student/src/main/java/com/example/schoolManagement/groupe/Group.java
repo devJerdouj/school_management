@@ -25,7 +25,7 @@ public class Group {
     private int studentsNumber;
 
     @Column(name="group_capacity")
-    private int GroupCapacity;
+    private int groupCapacity;
 
     @ManyToOne
     @JoinColumn(name="level_id")

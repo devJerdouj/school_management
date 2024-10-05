@@ -12,7 +12,7 @@ import java.util.Date;
 public record StudentRequest(
 
 
-        @NotNull(message = "Student ID is required for update")
+
         Long id ,
 
         @NotBlank(message = "Student first name is required")
@@ -47,13 +47,12 @@ public record StudentRequest(
         @NotNull(message = "Student level ID is required")
         Long levelId, // Réception de l'ID du Level
 
-        @NotNull(message = "Student group ID is required")
         Long groupId, // Réception de l'ID du Group
 
-        @NotNull(message = "Student responsible ID is required")
+
         Long responsibleId , // Réception de l'ID du Responsible
 
-        @NotNull(message = "Student paymentPlan ID is required")
+
         Long paymentPlanId
 ) {
 
