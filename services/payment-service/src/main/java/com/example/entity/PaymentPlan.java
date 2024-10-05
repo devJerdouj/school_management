@@ -43,7 +43,7 @@ public class PaymentPlan {
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         PaymentPlan that = (PaymentPlan) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        return getPaymentPlanId() != null && Objects.equals(getPaymentPlanId(), that.getPaymentPlanId());
     }
 
     @Override
