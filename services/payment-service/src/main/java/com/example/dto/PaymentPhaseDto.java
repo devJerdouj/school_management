@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Data
 public class PaymentPhaseDto {
 
+    private Long paymentPhaseId;
     private Long studentId;
     private Double amountDue;
     private Long paymentPlanId;

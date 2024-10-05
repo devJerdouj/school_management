@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -67,9 +68,10 @@ public class PaymentPhaseService {
     }
 
     public PaymentPhaseDto updatePaymentPhase(Long paymentPhaseId, PaymentPhaseDto paymentPhaseDto){
+        Optional<PaymentPlan> paymentPlanOptional = paymentPlanRepository.findById(paymentPhaseDto.getPaymentPlanId());
+        PaymentPlan paymentPlan = paymentPlanOptional.orElseThrow(() -> new IllegalArgumentException("No payment plan found with this id"));
         PaymentPhase paymentPhase = PaymentPhaseMapper.toEntity(paymentPhaseDto,
-                paymentPlanRepository.findById(paymentPhaseDto.getPaymentPlanId())
-                        .orElseThrow(() -> new IllegalArgumentException("No payment plan found with this id")));
+                paymentPlan);
         paymentPhaseRepository.save(paymentPhase);
         return paymentPhaseDto;
     }
