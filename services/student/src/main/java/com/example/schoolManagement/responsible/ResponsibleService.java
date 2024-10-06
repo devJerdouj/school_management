@@ -2,10 +2,13 @@ package com.example.schoolManagement.responsible;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Service
 public class ResponsibleService {
 
     private final ResponsibleRepository responsibleRepository;

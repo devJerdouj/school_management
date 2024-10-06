@@ -47,15 +47,25 @@ public class StudentService {
 
             student.setGroup(selectedGroup);
         }
-        // payment plan id != null
-        //      check payment plan existence || if not existed create new one
-        //      call the generatePaymentPhases method of payment Service
-        // payment plan == null
-        //      call the getAmountBystudentlevel from the levelService class
-        //      use paymentPhases param
-        //      check payment plan existence || if not existed create new one
-        //      call the generatePaymentPhases method of payment Service
 
+        // Gestion du PaymentPlan
+        if (request.paymentPlanId() != null) {
+            // Utiliser la couche service pour obtenir le PaymentPlan
+            PaymentPlanDto paymentPlan = paymentPlanService.getPaymentPlanById(request.paymentPlanId());
+
+            // Appeler la méthode generatePaymentPhases du service Payment
+            paymentService.generatePaymentPhases(student.getId(), paymentPlan.getId(), paymentPlan.getNumberOfPhases());
+        } else {
+            // Si paymentPlanId est null, on génère un PaymentPlan basé sur le niveau de l'étudiant
+            double totalCost = levelService.getAmountByStudentLevel(student.getId());
+
+            // Création d'un PaymentPlan si nécessaire
+            PaymentPlanDto newPaymentPlan = paymentPlanService.createPaymentPlan(
+                    new PaymentPlanDto(null, totalCost, phasesNumber));
+
+            // Appeler la méthode generatePaymentPhases avec le nouveau PaymentPlan
+            paymentService.generatePaymentPhases(student.getId(), newPaymentPlan.getId(), phasesNumber);
+        }
 
 
         return studentRepository.save(student).getId();
