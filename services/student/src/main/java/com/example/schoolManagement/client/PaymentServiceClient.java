@@ -1,5 +1,6 @@
 package com.example.schoolManagement.client;
 
+import com.example.schoolManagement.dto.PaymentPlanDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
