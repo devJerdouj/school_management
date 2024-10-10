@@ -13,10 +13,10 @@ public class PaymentServiceClient {
 
     public PaymentPlanDto getPaymentPlanById(Long paymentPlanId) {
         return webClient.get()
-                .uri("/api/payment-plans/{paymentPlanId}", paymentPlanId)
+                .uri("payments/api/payment-plans/{paymentPlanId}", paymentPlanId)
                 .retrieve()
                 .bodyToMono(PaymentPlanDto.class)
-                .block();  // Utilisation synchrone ici
+                .block();
     }
 
     public void generatePaymentPhases(Long studentId, Long paymentPlanId) {
@@ -25,7 +25,7 @@ public class PaymentServiceClient {
             public Long paymentPlanI = paymentPlanId;
         };
         webClient.post()
-                .uri("/api/payment-phases/generate")
+                .uri("payments/api/payment-phases/generate")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -33,5 +33,17 @@ public class PaymentServiceClient {
     }
 
     public PaymentPlanDto createPaymentPlan(PaymentPlanDto paymentPlanDto) {
+        Object request = new Object() {
+            Long paymentPlanId = paymentPlanDto.paymentPlanId();
+            Double annualCost = paymentPlanDto.annualCost();
+            Long numberOfPhases = paymentPlanDto.numberOfPhases();
+        };
+        return webClient.post()
+                .uri("payments/api/payment-plans/create")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(PaymentPlanDto.class)
+                .block();
+
     }
 }

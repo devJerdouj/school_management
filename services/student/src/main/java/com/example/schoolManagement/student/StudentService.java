@@ -5,7 +5,6 @@ import com.example.schoolManagement.client.PaymentServiceClient;
 import com.example.schoolManagement.dto.PaymentPlanDto;
 import com.example.schoolManagement.groupe.Group;
 import com.example.schoolManagement.groupe.GroupRepository;
-import com.example.schoolManagement.level.LevelController;
 import com.example.schoolManagement.level.LevelService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -53,25 +52,18 @@ public class StudentService {
             student.setGroup(selectedGroup);
         }
 
-        // Gestion du PaymentPlan
         if (request.paymentPlanId() != null) {
-            // Utiliser la couche service pour obtenir le PaymentPlan
             PaymentPlanDto paymentPlan = paymentService.getPaymentPlanById(request.paymentPlanId());
 
-            // Appeler la méthode generatePaymentPhases du service Payment
             paymentService.generatePaymentPhases(student.getId(), paymentPlan.paymentPlanId());
         } else {
-            // Si paymentPlanId est null, on génère un PaymentPlan basé sur le niveau de l'étudiant
             double totalCost = levelService.getAmountByStudentLevel(student.getId());
 
-            // Création d'un PaymentPlan si nécessaire
             PaymentPlanDto newPaymentPlan = paymentService.createPaymentPlan(
                     new PaymentPlanDto(null, totalCost, phasesNumber));
 
-            // Appeler la méthode generatePaymentPhases avec le nouveau PaymentPlan
-            paymentService.generatePaymentPhases(student.getId(), newPaymentPlan.getId(), phasesNumber);
+            paymentService.generatePaymentPhases(student.getId(), newPaymentPlan.paymentPlanId());
         }
-
 
         return studentRepository.save(student).getId();
     }
