@@ -1,12 +1,15 @@
 package com.example.schoolManagement.student;
 
 
+import com.example.schoolManagement.client.PaymentServiceClient;
+import com.example.schoolManagement.dto.PaymentPlanDto;
 import com.example.schoolManagement.groupe.Group;
 import com.example.schoolManagement.groupe.GroupRepository;
+import com.example.schoolManagement.level.LevelController;
+import com.example.schoolManagement.level.LevelService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,6 +21,8 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final GroupRepository groupRepository;
+    private PaymentServiceClient paymentService;
+    private LevelService levelService;
 
     public  StudentResponse findById(Long studentId) {
         return studentRepository.findById(studentId)
@@ -51,16 +56,16 @@ public class StudentService {
         // Gestion du PaymentPlan
         if (request.paymentPlanId() != null) {
             // Utiliser la couche service pour obtenir le PaymentPlan
-            PaymentPlanDto paymentPlan = paymentPlanService.getPaymentPlanById(request.paymentPlanId());
+            PaymentPlanDto paymentPlan = paymentService.getPaymentPlanById(request.paymentPlanId());
 
             // Appeler la méthode generatePaymentPhases du service Payment
-            paymentService.generatePaymentPhases(student.getId(), paymentPlan.getId(), paymentPlan.getNumberOfPhases());
+            paymentService.generatePaymentPhases(student.getId(), paymentPlan.paymentPlanId());
         } else {
             // Si paymentPlanId est null, on génère un PaymentPlan basé sur le niveau de l'étudiant
             double totalCost = levelService.getAmountByStudentLevel(student.getId());
 
             // Création d'un PaymentPlan si nécessaire
-            PaymentPlanDto newPaymentPlan = paymentPlanService.createPaymentPlan(
+            PaymentPlanDto newPaymentPlan = paymentService.createPaymentPlan(
                     new PaymentPlanDto(null, totalCost, phasesNumber));
 
             // Appeler la méthode generatePaymentPhases avec le nouveau PaymentPlan

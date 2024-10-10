@@ -5,5 +5,5 @@ import java.time.LocalDate;
 public record PaymentPlanDto(
          Long paymentPlanId,
          Double annualCost,
-         Integer numberOfPhases
+         Long numberOfPhases
 ) {}
