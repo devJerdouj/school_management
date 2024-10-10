@@ -8,15 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @Service
 public class StudentServiceClient {
     private WebClient webClient;
 
-
     public Boolean checkStudentValidity(Long studentId) {
         return webClient.get()
-                .uri("api/students/{studentId}", studentId)
+                .uri("/api/students/{studentId}", studentId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
                 {
@@ -26,7 +27,7 @@ public class StudentServiceClient {
                     return Mono.error(new RuntimeException("Student Service is unavailable. Please try again later."));
                 })
                 .bodyToMono(StudentDto.class)
-                .map(studentDto -> studentDto.id() != null)
+                .map(Objects::nonNull)
                 .block();
 
     }

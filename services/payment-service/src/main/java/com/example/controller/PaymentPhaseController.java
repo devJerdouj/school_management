@@ -19,7 +19,7 @@ public class PaymentPhaseController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createPaymentPhases(@RequestParam Long studentId, @RequestParam Long paymentPlanId) {
-        paymentPhaseService.createPaymentPhases(studentId, paymentPlanId);
+        paymentPhaseService.generatePaymentPhases(studentId, paymentPlanId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
