@@ -1,0 +1,34 @@
+
+data:
+  mongodb:
+    username: school
+    password: school
+    host: localhost
+    port: 27017
+    database: notification
+    authentication-database: admin
+kafka:
+  consumer:
+    bootstrap-servers: localhost:8051
+    group-id: paymentGroup
+    auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring.json.trusted.packages: '*'
+      spring.json.type.mapping: paymentConfirmation:org.techie.notificationservice.entity.PaymentConfirmation,nextPaymentAlert:org.techie.notificationservice.entity.NextPaymentAlert
+mail:
+  host: localhost
+  port: 1025
+  username: mail
+  password: mail
+  properties:
+    mail:
+      smtp:
+        trust: "*"
+      auth: true
+      starttls:
+        enabled: true
+      connectiontimeout: 5000
+      timeout: 3000
+      writetimeout: 5000

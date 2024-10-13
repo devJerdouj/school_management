@@ -11,8 +11,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>student-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>student</name>
-	<description>student</description>
+	<name>student-service</name>
+	<description>student-service</description>
 	<url/>
 	<licenses>
 		<license/>
