@@ -62,7 +62,7 @@ public class PaymentPhaseController {
     @GetMapping("/payment-plan/{paymentPlanId}")
     public ResponseEntity<List<PaymentPhaseDto>> getPaymentPhasesByPaymentPlanId(@PathVariable Long paymentPlanId) {
         List<PaymentPhaseDto> paymentPhases = paymentPhaseService.getPaymentPhasesByPaymentPlanId(paymentPlanId);
-        return new ResponseEntity<>(paymentPhases, HttpStatus.OK);
+        return new ResponseEntity<>(paymentPhases,HttpStatus.OK);
     }
 
     @DeleteMapping("/{paymentPhaseId}")
