@@ -132,8 +132,8 @@ public class PaymentService {
         List<PaymentPhase> upcomingPaymentPhases = paymentPhaseRepository
                 .findAllByDueDateAndIsPaidFalseOrderByDueDateAsc(expiredDate)
                 .orElseThrow(() -> new EntityNotFoundException("No payment phases found for this due date"));
-                ;
 
+        upcomingPaymentPhases.stream().
 
         for (PaymentPhase phase : upcomingPaymentPhases) {
             UpcomingPaymentReminderEvent reminderEvent = new UpcomingPaymentReminderEvent(

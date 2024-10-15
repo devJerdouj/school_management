@@ -16,9 +16,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentProducer {
+
+
     private static final String PAYMENT_COMPLETED_TOPIC = "payment_completed";
     private static final String PAYMENT_OVERDUE_TOPIC = "payment_overdue";
     private static final String UPCOMING_PAYMENT_REMINDER_TOPIC = "upcoming_payment_reminder";
+
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -40,7 +43,7 @@ public class PaymentProducer {
     }
 
     public void sendPaymentOverdueEvent(PaymentOverdueEvent event) {
-        log.info("Sending PaymentOverdueEvent for paymentId: {}", event.getPaymentId());
+        log.info("Sending PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId());
 
         Message<PaymentOverdueEvent> message = MessageBuilder
                 .withPayload(event)
@@ -49,9 +52,9 @@ public class PaymentProducer {
 
         try {
             kafkaTemplate.send(message);
-            log.info("PaymentOverdueEvent sent successfully for paymentId: {}", event.getPaymentId());
+            log.info("PaymentOverdueEvent sent successfully for paymentId: {}", event.getPhasePaymentId());
         } catch (Exception e) {
-            log.error("Failed to send PaymentOverdueEvent for paymentId: {}", event.getPaymentId(), e);
+            log.error("Failed to send PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId(), e);
             throw new RuntimeException("Error while sending PaymentOverdueEvent", e);
         }
     }
