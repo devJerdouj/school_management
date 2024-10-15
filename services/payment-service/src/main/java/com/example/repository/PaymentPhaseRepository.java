@@ -16,5 +16,9 @@ public interface PaymentPhaseRepository extends JpaRepository<PaymentPhase, Long
     Optional<List<PaymentPhase>> findAllByDueDateBeforeAndDueDateAfterOrderByDueDateAsc(LocalDate before, LocalDate after);
     Optional<List<PaymentPhase>> findAllByDueDateBeforeAndIsPaidFalseOrderByDueDateAsc(LocalDate today);
     Optional<List<PaymentPhase>> findAllByPaymentPlanOrderByDueDateAsc(PaymentPlan paymentPlan);
+    Optional<List<PaymentPhase>> findAllByDueDateAndIsPaidFalseOrderByDueDateAsc(LocalDate date);
 
+    List<PaymentPhase> findAllByDueDateBetweenAndIsPaidFalse(LocalDate today, LocalDate reminderDate);
+
+    List<PaymentPhase> findAllByDueDateBeforeAndIsPaidFalse(LocalDate today);
 }

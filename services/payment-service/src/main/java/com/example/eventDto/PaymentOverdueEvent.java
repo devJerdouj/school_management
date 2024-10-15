@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentOverdueEvent {
-    private Long paymentId;
+    private Long phasePaymentId;
     private Long studentId;
     private Double overdueAmount;
     private LocalDate dueDate;

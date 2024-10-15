@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,27 @@ public class StudentService {
         return studentRepository.save(student).getId();
     }
 
+    public List<StudentResponse> getAllStudentsByGroupId(Long groupId) {
 
+        Optional<List<Student>> optionalStudents = studentRepository.findAllByGroupId(groupId);
+
+        List<Student> students = optionalStudents.orElseThrow(() ->
+                new EntityNotFoundException("No students found for group ID: " + groupId));
+
+        return students.stream()
+                .map(studentMapper::toStudentResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<StudentResponse> getAllStudentsByResponsibleId(Long responsibleId) {
+        Optional<List<Student>> optionalStudents = studentRepository.findAllByResponsibleId(responsibleId);
+
+        List<Student> students = optionalStudents.orElseThrow(() ->
+                new EntityNotFoundException("No students found for group ID: " + responsibleId));
+
+        return students.stream()
+                .map(studentMapper::toStudentResponse)
+                .collect(Collectors.toList());
+    }
 
 }

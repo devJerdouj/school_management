@@ -9,13 +9,20 @@ import com.example.entity.Payment;
 import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
 import com.example.entity.PaymentStatus;
+import com.example.eventDto.PaymentCompletedEvent;
+import com.example.eventDto.PaymentOverdueEvent;
+import com.example.eventDto.UpcomingPaymentReminderEvent;
 import com.example.exception.ResourceNotFoundException;
+import com.example.kafka.PaymentProducer;
 import com.example.mapper.PaymentMapper;
 import com.example.mapper.PaymentPhaseMapper;
+import com.example.repository.PaymentPhaseRepository;
 import com.example.repository.PaymentPlanRepository;
 import com.example.repository.PaymentRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -33,6 +40,8 @@ public class PaymentService {
     private PaymentPhaseService paymentPhaseService;
     private WebClient webClient;
     private StudentServiceClient studentServiceClient;
+    private PaymentProducer paymentProducer;
+    private PaymentPhaseRepository paymentPhaseRepository;
 
 
     public void createPayment(PaymentRequest paymentRequest) {
@@ -95,6 +104,15 @@ public class PaymentService {
         PaymentPhaseDto dto = PaymentPhaseMapper.toDto(paymentPhase);
         paymentPhaseService.updatePaymentPhase(paymentPlanId, dto);
 
+        PaymentCompletedEvent completedEvent = new PaymentCompletedEvent(
+                payment.getPaymentId(),
+                payment.getStudentId(),
+                payment.getAmount(),
+                payment.getPaymentDate()
+        );
+
+        paymentProducer.sendPaymentCompletedEvent(completedEvent);
+
         return payment;
     }
 
@@ -104,7 +122,50 @@ public class PaymentService {
         return PaymentMapper.toDtoList(payments);
     }
 
+    @Scheduled(cron = "0 0 8 * * ?")
+    public void checkUpcomingPayments(){
 
+        LocalDate today = LocalDate.now();
+        LocalDate expiredDate = today.plusDays(3);
+
+
+        List<PaymentPhase> upcomingPaymentPhases = paymentPhaseRepository
+                .findAllByDueDateAndIsPaidFalseOrderByDueDateAsc(expiredDate)
+                .orElseThrow(() -> new EntityNotFoundException("No payment phases found for this due date"));
+                ;
+
+
+        for (PaymentPhase phase : upcomingPaymentPhases) {
+            UpcomingPaymentReminderEvent reminderEvent = new UpcomingPaymentReminderEvent(
+                    phase.getPaymentPhaseId(),
+                    phase.getStudentId(),
+                    phase.getDueDate(),
+                    phase.getRemainingAmount()
+            );
+
+            paymentProducer.sendUpcomingPaymentReminderEvent(reminderEvent);
+        }
+
+    }
+
+    @Scheduled(cron = "0 0 8 * * ?")
+    public void checkOverduePayments() {
+        LocalDate today = LocalDate.now();
+
+        List<PaymentPhase> overduePaymentPhases = paymentPhaseRepository
+                .findAllByDueDateBeforeAndIsPaidFalse(today);
+
+        for (PaymentPhase phase : overduePaymentPhases) {
+            PaymentOverdueEvent overdueEvent = new PaymentOverdueEvent(
+                    phase.getPaymentPhaseId(),
+                    phase.getStudentId(),
+                    phase.getRemainingAmount(),
+                    phase.getDueDate()
+            );
+
+            paymentProducer.sendPaymentOverdueEvent(overdueEvent);
+        }
+    }
 
 
 

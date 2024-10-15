@@ -34,4 +34,41 @@ public class StudentController {
         return ResponseEntity.ok(studentService.findAll());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Long> updateStudent(@PathVariable Long id, @RequestBody StudentRequest request) {
+        StudentRequest updatedRequest = new StudentRequest(
+                id,
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.code(),
+                request.address(),
+                request.numberPhone(),
+                request.birthDate(),
+                request.levelId(),
+                request.groupId(),
+                request.responsibleId(),
+                request.paymentPlanId()
+        );
+
+        Long updatedStudentId = studentService.updateStudent(updatedRequest);
+        return ResponseEntity.ok(updatedStudentId);
+    }
+
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<List<StudentResponse>> getAllStudentsByGroupId(@PathVariable Long groupId) {
+        List<StudentResponse> students = studentService.getAllStudentsByGroupId(groupId);
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/responsible/{responsibleId}")
+    public ResponseEntity<List<StudentResponse>> getAllStudentsByResponsibleId(@PathVariable Long responsibleId) {
+        List<StudentResponse> students = studentService.getAllStudentsByResponsibleId(responsibleId);
+        return ResponseEntity.ok(students);
+    }
+
+
+
+
+
 }
