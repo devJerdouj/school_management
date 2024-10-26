@@ -48,7 +48,7 @@ public class StudentMapper {
                 student.getPaymentPlanId(),
                 new LevelResponse(student.getLevel().getId(), student.getLevel().getName(),student.getLevel().getTotalCost(),groupMapper.toGroupResponseSet(student.getLevel().getGroups())),
                 new GroupResponse(student.getGroup().getId(), student.getGroup().getName(),student.getGroup().getStudentsNumber(),student.getGroup().getGroupCapacity()),
-                new ResponsibleResponse(student.getResponsible().getId(), student.getResponsible().getFirstName(), student.getResponsible().getLastName(), student.getResponsible().getPhoneNumber())
+                new ResponsibleResponse(student.getResponsible().getId(), student.getResponsible().getFirstName(), student.getResponsible().getLastName(), student.getResponsible().getPhoneNumber(),student.getResponsible().getEmail())
         );
 
     }

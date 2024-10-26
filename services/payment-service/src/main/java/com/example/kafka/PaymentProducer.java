@@ -12,6 +12,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -59,19 +61,20 @@ public class PaymentProducer {
         }
     }
 
-    public void sendUpcomingPaymentReminderEvent(UpcomingPaymentReminderEvent event) {
-        log.info("Sending UpcomingPaymentReminderEvent for studentId: {}", event.getStudentId());
+    public void sendUpcomingPaymentReminderEvent(List<UpcomingPaymentReminderEvent> event) {
 
-        Message<UpcomingPaymentReminderEvent> message = MessageBuilder
+//              log.info("Sending UpcomingPaymentReminderEvent for studentId: {}", event.getFirst().getStudentId());
+
+        Message<List<UpcomingPaymentReminderEvent>> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, UPCOMING_PAYMENT_REMINDER_TOPIC)
                 .build();
 
         try {
             kafkaTemplate.send(message);
-            log.info("UpcomingPaymentReminderEvent sent successfully for studentId: {}", event.getStudentId());
+     //       log.info("UpcomingPaymentReminderEvent sent successfully for studentId: {}", event.getFirst().getStudentId());
         } catch (Exception e) {
-            log.error("Failed to send UpcomingPaymentReminderEvent for studentId: {}", event.getStudentId(), e);
+       //     log.error("Failed to send UpcomingPaymentReminderEvent for studentId: {}", event.getFirst().getStudentId(), e);
             throw new RuntimeException("Error while sending UpcomingPaymentReminderEvent", e);
         }
     }

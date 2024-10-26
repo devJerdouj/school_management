@@ -12,6 +12,7 @@ import com.example.entity.PaymentStatus;
 import com.example.eventDto.PaymentCompletedEvent;
 import com.example.eventDto.PaymentOverdueEvent;
 import com.example.eventDto.UpcomingPaymentReminderEvent;
+import com.example.mapper.UpcomingUnpaidPhasesEventMapper;
 import com.example.exception.ResourceNotFoundException;
 import com.example.kafka.PaymentProducer;
 import com.example.mapper.PaymentMapper;
@@ -28,20 +29,24 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PaymentService {
 
-    private  PaymentPlanRepository paymentPlanRepository;
+    private PaymentPlanRepository paymentPlanRepository;
     private PaymentRepository paymentRepository;
     private PaymentPhaseService paymentPhaseService;
     private WebClient webClient;
     private StudentServiceClient studentServiceClient;
     private PaymentProducer paymentProducer;
     private PaymentPhaseRepository paymentPhaseRepository;
+    private UpcomingUnpaidPhasesEventMapper upcomingUnpaidPhasesEventMapper;
 
 
     public void createPayment(PaymentRequest paymentRequest) {
@@ -133,18 +138,21 @@ public class PaymentService {
                 .findAllByDueDateAndIsPaidFalseOrderByDueDateAsc(expiredDate)
                 .orElseThrow(() -> new EntityNotFoundException("No payment phases found for this due date"));
 
-        upcomingPaymentPhases.stream().
-
-        for (PaymentPhase phase : upcomingPaymentPhases) {
-            UpcomingPaymentReminderEvent reminderEvent = new UpcomingPaymentReminderEvent(
-                    phase.getPaymentPhaseId(),
-                    phase.getStudentId(),
-                    phase.getDueDate(),
-                    phase.getRemainingAmount()
-            );
-
-            paymentProducer.sendUpcomingPaymentReminderEvent(reminderEvent);
+        Map<Long, List<PaymentPhase>> collect = upcomingPaymentPhases
+                .stream().collect(Collectors.groupingBy(PaymentPhase::getStudentId));
+        for (Long l : collect.keySet()) {
+            var phases = collect.get(l);
+            if(phases.size()>1 ){
+                List<UpcomingPaymentReminderEvent> events = upcomingUnpaidPhasesEventMapper.mapToEvent(phases);
+                paymentProducer.sendUpcomingPaymentReminderEvent(events);
+            }else {
+                UpcomingPaymentReminderEvent event = upcomingUnpaidPhasesEventMapper.mapToEvent(phases.get(0));
+                paymentProducer.sendUpcomingPaymentReminderEvent(Collections.singletonList(event));
+            }
         }
+
+
+
 
     }
 

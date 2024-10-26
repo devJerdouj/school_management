@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface PaymentPhaseRepository extends JpaRepository<PaymentPhase, Long> {
@@ -18,7 +19,6 @@ public interface PaymentPhaseRepository extends JpaRepository<PaymentPhase, Long
     Optional<List<PaymentPhase>> findAllByPaymentPlanOrderByDueDateAsc(PaymentPlan paymentPlan);
     Optional<List<PaymentPhase>> findAllByDueDateAndIsPaidFalseOrderByDueDateAsc(LocalDate date);
 
-    List<PaymentPhase> findAllByDueDateBetweenAndIsPaidFalse(LocalDate today, LocalDate reminderDate);
 
     List<PaymentPhase> findAllByDueDateBeforeAndIsPaidFalse(LocalDate today);
 }

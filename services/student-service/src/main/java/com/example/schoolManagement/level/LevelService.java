@@ -19,7 +19,6 @@ public class LevelService {
     private final LevelRepository levelRepository;
     private final LevelMapper levelMapper;
     private final GroupMapper groupMapper;
-    private LevelService levelService;
     private StudentService studentService;
 
 
