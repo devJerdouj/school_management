@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/payment-phases")
+@RequestMapping("/api/v1/payment-phases")
 @AllArgsConstructor
 public class PaymentPhaseController {
 

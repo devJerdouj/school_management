@@ -9,8 +9,8 @@ spring:
       authentication-database: admin
   kafka:
     consumer:
-      bootstrap-servers: localhost:8051
-      group-id: paymentGroup
+      bootstrap-servers: localhost:9092
+      group-id: com.example
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

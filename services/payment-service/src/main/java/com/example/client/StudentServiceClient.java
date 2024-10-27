@@ -15,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Service
 public class StudentServiceClient {
+
     private WebClient webClient;
 
     public Boolean checkStudentValidity(Long studentId) {
@@ -46,6 +47,21 @@ public class StudentServiceClient {
                     return Mono.error(new RuntimeException("Student Service is unavailable. Please try again later."));
                 })
                 .bodyToMono(new ParameterizedTypeReference<List<StudentDto>>(){})
+                .block();
+    }
+
+    public StudentDto findStudentByID(Long studentId){
+        return webClient.get()
+                .uri("/api/v1/students/{student-id}",studentId)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
+                {
+                    return Mono.error(new ResourceNotFoundException("Something went wrong, try again ! "));
+                })
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    return Mono.error(new RuntimeException("Student Service is unavailable. Please try again later."));
+                })
+                .bodyToMono(new ParameterizedTypeReference<StudentDto>(){})
                 .block();
     }
 }

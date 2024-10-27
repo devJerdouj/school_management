@@ -106,10 +106,15 @@ public class PaymentService {
 
         PaymentCompletedEvent completedEvent = new PaymentCompletedEvent(
                 payment.getPaymentId(),
-                payment.getStudentId(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).code(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).firstName(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).lastName(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).responsibleFirstname(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).firstName(),
+                payment.getPaymentMethod(),
                 payment.getAmount(),
                 payment.getPaymentDate()
-        );
+                );
 
         paymentProducer.sendPaymentCompletedEvent(completedEvent);
 
@@ -161,8 +166,11 @@ public class PaymentService {
         for (PaymentPhase phase : overduePaymentPhases) {
             PaymentOverdueEvent overdueEvent = new PaymentOverdueEvent(
                     phase.getPaymentPhaseId(),
-                    phase.getStudentId(),
-                    phase.getRemainingAmount(),
+                    studentServiceClient.findStudentByID(phase.getStudentId()).code(),
+                    studentServiceClient.findStudentByID(phase.getStudentId()).firstName(),
+                    studentServiceClient.findStudentByID(phase.getStudentId()).lastName(),
+                    studentServiceClient.findStudentByID(phase.getStudentId()).responsibleFirstname(),
+                    studentServiceClient.findStudentByID(phase.getStudentId()).firstName(),                    phase.getRemainingAmount(),
                     phase.getDueDate()
             );
 

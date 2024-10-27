@@ -31,6 +31,19 @@ services:
       - microservices-net
     restart: unless-stopped
 
+  # KeyClock Service
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:26.0.2
+    ports:
+      - 9098:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    networks:
+      microservices-net:
+    command:
+      - "start-dev"
   # MongoDB Service
   mongodb:
     image: mongo

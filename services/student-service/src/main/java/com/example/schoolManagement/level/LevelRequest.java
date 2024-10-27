@@ -22,7 +22,7 @@ public record LevelRequest(
         @Min(value = 0, message = "Total cost cannot be negative")
         double totalCost,
 
-        @NotNull(message = "Groups are required")
+//        @NotNull(message = "Groups are required")
         Set<@Valid GroupRequest> groups
 ) {
 }

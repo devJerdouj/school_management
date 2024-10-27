@@ -8,14 +8,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
-        <module name="student-service" />
         <module name="payment-service" />
+        <module name="student-service" />
+        <module name="gateway-server" />
         <module name="discovery-service" />
         <module name="notification-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="discovery" target="17" />
+      <module name="security" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -23,8 +24,10 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
+      <module name="gateway-server" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
+      <module name="security" options="-parameters" />
       <module name="student-service" options="-parameters" />
     </option>
   </component>

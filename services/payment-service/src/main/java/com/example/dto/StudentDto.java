@@ -11,6 +11,10 @@ public record StudentDto (
 
     String email,
 
+    String responsibleFirstname,
+
+    String responsibleEmail,
+
     String code,
 
     LocalDate birthDate,

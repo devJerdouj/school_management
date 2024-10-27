@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/responsibles")
+@RequestMapping("/api/v1/responsibles")
 public class ResponsibleController {
 
     private final ResponsibleService responsibleService;

@@ -1,0 +1,42 @@
+spring:
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: "http://localhost:9098/realms/micro-services"
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: student-service
+          uri: lb:http://STUDENT-SERVICE
+          predicates:
+            - Path=/api/v1/students/**
+        - id: student-service
+          uri: lb:http://STUDENT-SERVICE
+          predicates:
+            - Path=/api/v1/levels/**
+        - id: student-service
+          uri: lb:http://STUDENT-SERVICE
+          predicates:
+            - Path=/api/v1/responsibles/**
+        - id: student-service
+          uri: lb:http://STUDENT-SERVICE
+          predicates:
+            - Path=/api/v1/groups/**
+        - id: payment-service
+          uri: lb:http://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payments/**
+        - id: payment-service
+          uri: lb:http://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payment-phases/**
+        - id: notification-service
+          uri: lb:http://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/v1/notifications/**
+server:
+  port: 8055

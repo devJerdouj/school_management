@@ -1,5 +1,8 @@
 package com.example.schoolManagement.responsible;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ResponsibleMapper {
 
 
