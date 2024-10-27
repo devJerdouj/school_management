@@ -21,5 +21,6 @@ public class Notification{
     private LocalDateTime notificationDate;
     private PaymentConfirmation paymentConfirmation;
     private NextPaymentAlert nextPaymentAlert;
+    private PaymentOverdueEvent paymentOverdueEvent;
 
 }

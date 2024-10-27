@@ -1,17 +1,15 @@
 package com.example.service;
 
 import com.example.client.StudentServiceClient;
-import com.example.config.WebClientConfig;
 import com.example.dto.PaymentPhaseDto;
 import com.example.dto.PaymentRequest;
-import com.example.dto.StudentDto;
 import com.example.entity.Payment;
 import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
 import com.example.entity.PaymentStatus;
+import com.example.eventDto.NextPaymentAlert;
 import com.example.eventDto.PaymentCompletedEvent;
 import com.example.eventDto.PaymentOverdueEvent;
-import com.example.eventDto.UpcomingPaymentReminderEvent;
 import com.example.mapper.UpcomingUnpaidPhasesEventMapper;
 import com.example.exception.ResourceNotFoundException;
 import com.example.kafka.PaymentProducer;
@@ -22,17 +20,14 @@ import com.example.repository.PaymentPlanRepository;
 import com.example.repository.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,10 +138,10 @@ public class PaymentService {
         for (Long l : collect.keySet()) {
             var phases = collect.get(l);
             if(phases.size()>1 ){
-                List<UpcomingPaymentReminderEvent> events = upcomingUnpaidPhasesEventMapper.mapToEvent(phases);
+                List<NextPaymentAlert> events = upcomingUnpaidPhasesEventMapper.mapToEvent(phases);
                 paymentProducer.sendUpcomingPaymentReminderEvent(events);
             }else {
-                UpcomingPaymentReminderEvent event = upcomingUnpaidPhasesEventMapper.mapToEvent(phases.get(0));
+                NextPaymentAlert event = upcomingUnpaidPhasesEventMapper.mapToEvent(phases.get(0));
                 paymentProducer.sendUpcomingPaymentReminderEvent(Collections.singletonList(event));
             }
         }

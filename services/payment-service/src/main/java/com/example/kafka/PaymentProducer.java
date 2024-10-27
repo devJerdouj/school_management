@@ -1,9 +1,9 @@
 package com.example.kafka;
 
 
+import com.example.eventDto.NextPaymentAlert;
 import com.example.eventDto.PaymentCompletedEvent;
 import com.example.eventDto.PaymentOverdueEvent;
-import com.example.eventDto.UpcomingPaymentReminderEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -61,21 +61,22 @@ public class PaymentProducer {
         }
     }
 
-    public void sendUpcomingPaymentReminderEvent(List<UpcomingPaymentReminderEvent> event) {
+    public void sendUpcomingPaymentReminderEvent(List<NextPaymentAlert> event) {
 
-//              log.info("Sending UpcomingPaymentReminderEvent for studentId: {}", event.getFirst().getStudentId());
+              //log.info("Sending NextPaymentAlert for the student :: {}",
+        //      event.getFirst().getStudentFirstname()+ " " + event.getFirst().getStudentLastname());
 
-        Message<List<UpcomingPaymentReminderEvent>> message = MessageBuilder
+        Message<List<NextPaymentAlert>> message = MessageBuilder
                 .withPayload(event)
                 .setHeader(KafkaHeaders.TOPIC, UPCOMING_PAYMENT_REMINDER_TOPIC)
                 .build();
 
         try {
             kafkaTemplate.send(message);
-     //       log.info("UpcomingPaymentReminderEvent sent successfully for studentId: {}", event.getFirst().getStudentId());
+     //       log.info("NextPaymentAlert sent successfully for studentId: {}", event.getFirst().getStudentId());
         } catch (Exception e) {
-       //     log.error("Failed to send UpcomingPaymentReminderEvent for studentId: {}", event.getFirst().getStudentId(), e);
-            throw new RuntimeException("Error while sending UpcomingPaymentReminderEvent", e);
+       //     log.error("Failed to send NextPaymentAlert for studentId: {}", event.getFirst().getStudentId(), e);
+            throw new RuntimeException("Error while sending NextPaymentAlert", e);
         }
     }
 }

@@ -12,7 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PaymentOverdueEvent {
     private Long phasePaymentId;
-    private Long studentId;
+    private String studentCode;
+    private String studentFirstname;
+    private String studentLastname;
+    private String responsibleFirstname;
+    private String responsibleEmail;
     private Double overdueAmount;
     private LocalDate dueDate;
 }

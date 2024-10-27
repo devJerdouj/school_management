@@ -9,9 +9,12 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpcomingPaymentReminderEvent {
+public class NextPaymentAlert {
     private Long paymentPhaseId;
-    private Long studentId;
-    private LocalDate paymentDueDate;
+    private String studentFirstname;
+    private String studentLastname;
+    private String responsibleFirstname;
+    private String responsibleEmail;
     private Double amountDue;
+    private LocalDate paymentDueDate;
 }
