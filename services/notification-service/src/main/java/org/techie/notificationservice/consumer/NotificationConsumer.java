@@ -17,7 +17,7 @@ public class NotificationConsumer {
     private NotificationRepository notificationRepository;
     private EmailService emailService;
 
-    @KafkaListener(topics = "payment-complete")
+    @KafkaListener(topics = "payment-completed")
     public void consumePaymentCompleted(PaymentConfirmation confirmation) throws MessagingException {
         Notification notification = Notification.builder()
                 .paymentConfirmation(confirmation)
@@ -34,7 +34,7 @@ public class NotificationConsumer {
                 confirmation.PaymentPhaseId());
     }
 
-    @KafkaListener(topics = "next-payment-alert")
+    @KafkaListener(topics = "next-payment")
     public void consumeNextPaymentAlert(NextPaymentAlert alert) throws MessagingException {
         Notification notification = Notification.builder()
                 .nextPaymentAlert(alert)
@@ -52,7 +52,7 @@ public class NotificationConsumer {
                 alert.PaymentPhaseId());
     }
 
-    @KafkaListener(topics = "payment-overdue-alert")
+    @KafkaListener(topics = "payment-overdue")
     public void consumePaymentOverdueAlert(PaymentOverdueEvent alert) throws MessagingException {
         Notification notification = Notification.builder()
                 .paymentOverdueEvent(alert)

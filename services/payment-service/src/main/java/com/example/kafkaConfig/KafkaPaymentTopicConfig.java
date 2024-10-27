@@ -11,7 +11,7 @@ public class KafkaPaymentTopicConfig {
     @Bean
     public NewTopic paymentCompletedTopic()  {
         return TopicBuilder
-                .name("payment_completed")
+                .name("payment-completed")
                 .partitions(3)
                 .replicas(1)
                 .build();
@@ -20,7 +20,7 @@ public class KafkaPaymentTopicConfig {
     @Bean
     public NewTopic paymentOverdueTopic()  {
         return TopicBuilder
-                .name("payment_overdue")
+                .name("payment-overdue")
                 .partitions(3)
                 .replicas(1)
                 .build();
@@ -29,7 +29,7 @@ public class KafkaPaymentTopicConfig {
     @Bean
     public NewTopic paymentUpcomingReminderTopic()  {
         return TopicBuilder
-                .name("upcoming_payment_reminder")
+                .name("next-payment")
                 .partitions(3)
                 .replicas(1)
                 .build();
