@@ -1,8 +1,8 @@
 package com.example.schoolManagement.groupe;
 
+import com.example.schoolManagement.level.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +13,21 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    private final LevelRepository levelRepository;
 
-    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper) {
+    public GroupService(GroupRepository groupRepository, GroupMapper groupMapper, LevelRepository levelRepository) {
         this.groupRepository = groupRepository;
         this.groupMapper = groupMapper;
+        this.levelRepository = levelRepository;
     }
 
 
     @Transactional
     public Long createGroup(GroupRequest groupRequest) {
         Group group = groupMapper.toGroup(groupRequest);
+        Level level = levelRepository.findById(groupRequest.levelId())
+                .orElseThrow(() -> new EntityNotFoundException("Level not found with ID: " + groupRequest.levelId()));
+        group.setLevel(level);
         return groupRepository.save(group).getId();
     }
 

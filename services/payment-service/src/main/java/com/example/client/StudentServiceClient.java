@@ -20,7 +20,7 @@ public class StudentServiceClient {
 
     public Boolean checkStudentValidity(Long studentId) {
         return webClient.get()
-                .uri("/api/students/{studentId}", studentId)
+                .uri("/api/v1/students/{studentId}", studentId)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
                 {
@@ -37,7 +37,7 @@ public class StudentServiceClient {
 
     public List<StudentDto> getAllStudents(){
         return webClient.get()
-                .uri("/api/students")
+                .uri("/api/v1/students")
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse ->
                 {

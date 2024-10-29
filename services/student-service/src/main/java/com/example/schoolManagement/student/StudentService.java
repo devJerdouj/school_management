@@ -7,22 +7,25 @@ import com.example.schoolManagement.groupe.Group;
 import com.example.schoolManagement.groupe.GroupRepository;
 import com.example.schoolManagement.level.LevelService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final GroupRepository groupRepository;
-    private PaymentServiceClient paymentService;
-    private LevelService levelService;
+    private final PaymentServiceClient paymentService;
+    private final LevelService levelService;
 
     public  StudentResponse findById(Long studentId) {
         return studentRepository.findById(studentId)
@@ -38,9 +41,12 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Long createStudent(StudentRequest request, Long phasesNumber) {
 
+
         Student student = studentMapper.toStudent(request);
+        student.setId(null);
 
         if (request.groupId() == null) {
             Set<Group> availableGroups = groupRepository.findByLevelId(request.levelId());
@@ -53,20 +59,23 @@ public class StudentService {
             student.setGroup(selectedGroup);
         }
 
+        PaymentPlanDto paymentPlan;
         if (request.paymentPlanId() != null) {
-            PaymentPlanDto paymentPlan = paymentService.getPaymentPlanById(request.paymentPlanId());
+            paymentPlan = paymentService.getPaymentPlanById(request.paymentPlanId());
 
-            paymentService.generatePaymentPhases(student.getId(), paymentPlan.paymentPlanId());
         } else {
             double totalCost = levelService.getAmountByStudentLevel(student.getId());
 
-            PaymentPlanDto newPaymentPlan = paymentService.createPaymentPlan(
+            paymentPlan = paymentService.createPaymentPlan(
                     new PaymentPlanDto(null, totalCost, phasesNumber));
 
-            paymentService.generatePaymentPhases(student.getId(), newPaymentPlan.paymentPlanId());
         }
 
-        return studentRepository.save(student).getId();
+        Long id = studentRepository.save(student).getId();
+        paymentService.generatePaymentPhases(id, paymentPlan.paymentPlanId());
+        System.out.println(id);
+        return id;
+
     }
 
     public Long updateStudent(StudentRequest request) {

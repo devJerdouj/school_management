@@ -2,10 +2,12 @@ package com.example.schoolManagement.level;
 
 import com.example.schoolManagement.groupe.GroupMapper;
 import com.example.schoolManagement.student.Student;
+import com.example.schoolManagement.student.StudentRepository;
 import com.example.schoolManagement.student.StudentResponse;
 import com.example.schoolManagement.student.StudentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,7 @@ public class LevelService {
     private final LevelRepository levelRepository;
     private final LevelMapper levelMapper;
     private final GroupMapper groupMapper;
-    private StudentService studentService;
+    private final StudentRepository studentRepository;
 
 
 
@@ -83,11 +85,11 @@ public class LevelService {
 
     public double getAmountByStudentLevel(Long studentId) {
 
-        StudentResponse studentResponse = studentService.findById(studentId);
+        var studentResponse = studentRepository.findById(studentId).get();
 
-        LevelResponse levelResponse= studentResponse.level();
+        var levelResponse= studentResponse.getLevel();
 
-        return levelResponse.totalCost();
+        return levelResponse.getTotalCost();
     }
 
 

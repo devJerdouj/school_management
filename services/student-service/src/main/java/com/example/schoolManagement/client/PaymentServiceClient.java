@@ -1,7 +1,9 @@
 package com.example.schoolManagement.client;
 
 import com.example.schoolManagement.dto.PaymentPlanDto;
+import io.swagger.v3.oas.models.parameters.RequestBody;
 import lombok.AllArgsConstructor;
+import org.springframework.http.StreamingHttpOutputMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,7 +15,7 @@ public class PaymentServiceClient {
 
     public PaymentPlanDto getPaymentPlanById(Long paymentPlanId) {
         return webClient.get()
-                .uri("payments/api/payment-plans/{paymentPlanId}", paymentPlanId)
+                .uri("/api/v1/payment-plans/{paymentPlanId}", paymentPlanId)
                 .retrieve()
                 .bodyToMono(PaymentPlanDto.class)
                 .block();
@@ -25,8 +27,11 @@ public class PaymentServiceClient {
             public Long paymentPlanI = paymentPlanId;
         };
         webClient.post()
-                .uri("payments/api/payment-phases/generate")
-                .bodyValue(request)
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/v1/payment-phases/create")
+                        .queryParam("studentId", studentId)
+                        .queryParam("paymentPlanId", paymentPlanId)
+                        .build())
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();

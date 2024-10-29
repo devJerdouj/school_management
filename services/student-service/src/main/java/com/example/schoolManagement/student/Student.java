@@ -5,6 +5,9 @@ import com.example.schoolManagement.responsible.Responsible;
 import jakarta.persistence.*;
 import com.example.schoolManagement.level.Level;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -16,6 +19,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Student {
     @Id
     @Column(name = "student_id")
@@ -49,11 +53,11 @@ public class Student {
     @JoinColumn(name="group_id")
     private Group group ;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="created_at",nullable = false,updatable = false)
+    @CreatedDate
+    @Column(name="created_at",updatable = false)
     private Date createAt ;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
     @Column(name = "updated_at")
     private Date updateAt ;
 

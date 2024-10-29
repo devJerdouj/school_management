@@ -11,21 +11,24 @@ public class PaymentPhaseMapper {
 
     public static PaymentPhaseDto toDto(PaymentPhase paymentPhase) {
         PaymentPhaseDto dto = new PaymentPhaseDto();
+        dto.setPaymentPhaseId(paymentPhase.getPaymentPhaseId());
         dto.setStudentId(paymentPhase.getStudentId());
         dto.setAmountDue(paymentPhase.getAmountDue());
+        dto.setRemainingAmount(paymentPhase.getRemainingAmount());
         dto.setDueDate(paymentPhase.getDueDate());
         dto.setIsPaid(paymentPhase.getIsPaid());
         dto.setPaymentPlanId(paymentPhase.getPaymentPlan().getPaymentPlanId());
-
         return dto;
     }
 
     public static PaymentPhase toEntity(PaymentPhaseDto paymentPhaseDto, PaymentPlan paymentPlan) {
         PaymentPhase paymentPhase = new PaymentPhase();
+        paymentPhase.setPaymentPhaseId(paymentPhaseDto.getPaymentPhaseId());
         paymentPhase.setStudentId(paymentPhaseDto.getStudentId());
         paymentPhase.setAmountDue(paymentPhaseDto.getAmountDue());
         paymentPhase.setDueDate(paymentPhaseDto.getDueDate());
         paymentPhase.setIsPaid(paymentPhaseDto.getIsPaid());
+        paymentPhase.setRemainingAmount(paymentPhaseDto.getRemainingAmount());
         paymentPhase.setPaymentPlan(paymentPlan);
 
         return paymentPhase;

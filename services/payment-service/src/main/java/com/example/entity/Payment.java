@@ -26,7 +26,7 @@ public class Payment {
     private Long studentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_phase_id", nullable = false)
+    @JoinColumn(name = "payment_phase_id")
     @ToString.Exclude
     private PaymentPhase paymentPhase;
 

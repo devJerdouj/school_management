@@ -40,7 +40,7 @@ public class PaymentPhase {
     @Column(name = "is_paid", nullable = false)
     private Boolean isPaid = false;
 
-    @Column(name = "remaining_amount", nullable = false)
+    @Column(name = "remaining_amount", nullable = true)
     private Double remainingAmount = amountDue;
 
     @Column(name = "payment_date", nullable = true)

@@ -30,6 +30,9 @@ public class PaymentPhaseService {
                     new PaymentPhaseDto(null ,studentId, annualCost / numberOfPhases,
                             paymentPlanId, LocalDate.of(2024, 1,1).plusMonths(((long) i * (int)(9/numberOfPhases)))
                             ,false);
+            if (paymentPhaseDto.getRemainingAmount() == null) {
+                paymentPhaseDto.setRemainingAmount(paymentPhaseDto.getAmountDue());
+            }
 
             paymentPhaseRepository.save(PaymentPhaseMapper.toEntity(paymentPhaseDto, paymentPlan));
         }

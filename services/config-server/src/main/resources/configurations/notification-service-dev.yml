@@ -5,7 +5,7 @@ spring:
       password: school
       host: localhost
       port: 27017
-      database: notification
+      database: notifications
       authentication-database: admin
   kafka:
     consumer:

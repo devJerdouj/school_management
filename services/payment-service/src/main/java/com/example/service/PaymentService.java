@@ -22,6 +22,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
@@ -44,6 +45,7 @@ public class PaymentService {
     private UpcomingUnpaidPhasesEventMapper upcomingUnpaidPhasesEventMapper;
 
 
+    @Transactional
     public void createPayment(PaymentRequest paymentRequest) {
 
         Long studentId = paymentRequest.getStudentId();
@@ -58,32 +60,34 @@ public class PaymentService {
                 nextUnpaidPaymentPhase, paymentPlan);
         Double amountToPay = paymentRequest.getAmount();
 
-        while (amountToPay > 0 && unpaidPhase != null) {
+        while (amountToPay > 0 ) {
+            Payment payment ;
             if (amountToPay > unpaidPhase.getRemainingAmount()) {
-                Payment payment = new Payment(null, studentId, unpaidPhase, LocalDate.now(), amountToPay,
+                payment = new Payment(null, studentId, unpaidPhase, LocalDate.now(), unpaidPhase.getRemainingAmount(),
                         paymentRequest.getPaymentMethod(), PaymentStatus.CREATED , new byte[0]);
-                paymentRepository.save(payment);
                 amountToPay -= unpaidPhase.getRemainingAmount();
-                unpaidPhase.setRemainingAmount(0.0);
+                unpaidPhase.setRemainingAmount((double) 0);
+                unpaidPhase.setIsPaid(true);
                 unpaidPhase.setPaymentDate(LocalDate.now());
 
             } else {
                 unpaidPhase.setRemainingAmount(unpaidPhase.getRemainingAmount() - amountToPay);
 
-                Payment payment = new Payment(null, studentId, unpaidPhase, LocalDate.now(), amountToPay,
+                payment = new Payment(null, studentId, unpaidPhase, LocalDate.now(), amountToPay,
                         paymentRequest.getPaymentMethod(), PaymentStatus.CREATED , new byte[0]);
-
-                paymentRepository.save(payment);
 
                 amountToPay = 0.0;
             }
             paymentPhaseService.updatePaymentPhase(unpaidPhase.getPaymentPhaseId(),
                     PaymentPhaseMapper.toDto(unpaidPhase));
 
+            paymentRepository.save(payment);
 
             if (amountToPay > 0) {
-                unpaidPhase = PaymentPhaseMapper.toEntity(
-                        nextUnpaidPaymentPhase, paymentPlan);
+                nextUnpaidPaymentPhase =
+                        paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
+                paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhase.getPaymentPlanId()).get();
+                unpaidPhase = PaymentPhaseMapper.toEntity(nextUnpaidPaymentPhase, paymentPlan);
             }
         }
 
