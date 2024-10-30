@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.client.StudentServiceClient;
 import com.example.dto.PaymentPhaseDto;
 import com.example.dto.PaymentRequest;
+import com.example.dto.StudentDto;
 import com.example.entity.Payment;
 import com.example.entity.PaymentPhase;
 import com.example.entity.PaymentPlan;
@@ -52,6 +53,7 @@ public class PaymentService {
         if(!studentServiceClient.checkStudentValidity(studentId)){
             return;
         }
+        StudentDto studentDto = studentServiceClient.findStudentByID(studentId);
 
         PaymentPhaseDto nextUnpaidPaymentPhase =
                 paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
@@ -89,6 +91,11 @@ public class PaymentService {
                 paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhase.getPaymentPlanId()).get();
                 unpaidPhase = PaymentPhaseMapper.toEntity(nextUnpaidPaymentPhase, paymentPlan);
             }
+            paymentProducer.sendPaymentCompletedEvent(new PaymentCompletedEvent(payment.getPaymentId(),studentDto.code(),
+                    studentDto.firstName(), studentDto.lastName(), studentDto.responsibleFirstname(),
+                    studentDto.responsibleEmail(), paymentRequest.getPaymentMethod(),
+                    payment.getAmount(), payment.getPaymentDate()));
+
         }
 
     }
@@ -147,11 +154,11 @@ public class PaymentService {
         for (Long l : collect.keySet()) {
             var phases = collect.get(l);
             if(phases.size()>1 ){
-                List<NextPaymentAlert> events = upcomingUnpaidPhasesEventMapper.mapToEvent(phases);
-                paymentProducer.sendUpcomingPaymentReminderEvent(events);
+//                List<NextPaymentAlert> events = upcomingUnpaidPhasesEventMapper.mapToEvent(phases);
+//                paymentProducer.sendUpcomingPaymentReminderEvent(events);
             }else {
-                NextPaymentAlert event = upcomingUnpaidPhasesEventMapper.mapToEvent(phases.get(0));
-                paymentProducer.sendUpcomingPaymentReminderEvent(Collections.singletonList(event));
+//                NextPaymentAlert event = upcomingUnpaidPhasesEventMapper.mapToEvent(phases.get(0));
+//                paymentProducer.sendUpcomingPaymentReminderEvent(Collections.singletonList(event));
             }
         }
 
@@ -178,7 +185,7 @@ public class PaymentService {
                     phase.getDueDate()
             );
 
-            paymentProducer.sendPaymentOverdueEvent(overdueEvent);
+//            paymentProducer.sendPaymentOverdueEvent(overdueEvent);
         }
     }
 

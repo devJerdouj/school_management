@@ -44,39 +44,39 @@ public class PaymentProducer {
         }
     }
 
-    public void sendPaymentOverdueEvent(PaymentOverdueEvent event) {
-        log.info("Sending PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId());
-
-        Message<PaymentOverdueEvent> message = MessageBuilder
-                .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, PAYMENT_OVERDUE_TOPIC)
-                .build();
-
-        try {
-            kafkaTemplate.send(message);
-            log.info("PaymentOverdueEvent sent successfully for paymentId: {}", event.getPhasePaymentId());
-        } catch (Exception e) {
-            log.error("Failed to send PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId(), e);
-            throw new RuntimeException("Error while sending PaymentOverdueEvent", e);
-        }
-    }
-
-    public void sendUpcomingPaymentReminderEvent(List<NextPaymentAlert> event) {
-
-              //log.info("Sending NextPaymentAlert for the student :: {}",
-        //      event.getFirst().getStudentFirstname()+ " " + event.getFirst().getStudentLastname());
-
-        Message<List<NextPaymentAlert>> message = MessageBuilder
-                .withPayload(event)
-                .setHeader(KafkaHeaders.TOPIC, UPCOMING_PAYMENT_REMINDER_TOPIC)
-                .build();
-
-        try {
-            kafkaTemplate.send(message);
-     //       log.info("NextPaymentAlert sent successfully for studentId: {}", event.getFirst().getStudentId());
-        } catch (Exception e) {
-       //     log.error("Failed to send NextPaymentAlert for studentId: {}", event.getFirst().getStudentId(), e);
-            throw new RuntimeException("Error while sending NextPaymentAlert", e);
-        }
-    }
+//    public void sendPaymentOverdueEvent(PaymentOverdueEvent event) {
+//        log.info("Sending PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId());
+//
+//        Message<PaymentOverdueEvent> message = MessageBuilder
+//                .withPayload(event)
+//                .setHeader(KafkaHeaders.TOPIC, PAYMENT_OVERDUE_TOPIC)
+//                .build();
+//
+//        try {
+//            kafkaTemplate.send(message);
+//            log.info("PaymentOverdueEvent sent successfully for paymentId: {}", event.getPhasePaymentId());
+//        } catch (Exception e) {
+//            log.error("Failed to send PaymentOverdueEvent for paymentId: {}", event.getPhasePaymentId(), e);
+//            throw new RuntimeException("Error while sending PaymentOverdueEvent", e);
+//        }
+//    }
+//
+//    public void sendUpcomingPaymentReminderEvent(List<NextPaymentAlert> event) {
+//
+//              //log.info("Sending NextPaymentAlert for the student :: {}",
+//        //      event.getFirst().getStudentFirstname()+ " " + event.getFirst().getStudentLastname());
+//
+//        Message<List<NextPaymentAlert>> message = MessageBuilder
+//                .withPayload(event)
+//                .setHeader(KafkaHeaders.TOPIC, UPCOMING_PAYMENT_REMINDER_TOPIC)
+//                .build();
+//
+//        try {
+//            kafkaTemplate.send(message);
+//     //       log.info("NextPaymentAlert sent successfully for studentId: {}", event.getFirst().getStudentId());
+//        } catch (Exception e) {
+//       //     log.error("Failed to send NextPaymentAlert for studentId: {}", event.getFirst().getStudentId(), e);
+//            throw new RuntimeException("Error while sending NextPaymentAlert", e);
+//        }
+//    }
 }
