@@ -19,9 +19,9 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.type.mapping:
-          NextPaymentAlert:org.techie.notificationservice.entity.NextPaymentAlert,
-          paymentOverdueEvent:org.techie.notificationservice.entity.PaymentOverdueEvent,
-          paymentCompletedEvent:org.techie.notificationservice.entity.PaymentCompletedEvent
+          NextPaymentAlert:com.example.eventDto.NextPaymentAlert,
+          PaymentOverdueEvent:com.example.eventDto.PaymentOverdueEvent,
+          PaymentCompletedEvent:com.example.eventDto.PaymentCompletedEvent
 
 
   flyway:

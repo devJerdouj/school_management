@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
         <module name="payment-service" />
+        <module name="discovery" />
         <module name="student-service" />
         <module name="gateway-server" />
         <module name="discovery-service" />

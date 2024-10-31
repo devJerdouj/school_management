@@ -11,12 +11,15 @@ spring:
     consumer:
       bootstrap-servers: localhost:9092
       group-id: com.example
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: '*'
-        spring.json.type.mapping: paymentConfirmation:org.techie.notificationservice.entity.PaymentConfirmation,nextPaymentAlert:org.techie.notificationservice.entity.NextPaymentAlert
+        spring.json.type.mapping:
+          PaymentCompletedEvent:com.example.notificationservice.entity.PaymentCompletedEvent,
+          NextPaymentAlert:com.example.notificationservice.entity.NextPaymentAlert,
+          PaymentOverdueEvent:com.example.notificationservice.entity.PaymentOverdueEvent
   mail:
     host: localhost
     port: 1025
