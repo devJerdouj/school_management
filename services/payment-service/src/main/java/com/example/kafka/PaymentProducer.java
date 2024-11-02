@@ -20,15 +20,15 @@ import java.util.List;
 public class PaymentProducer {
 
 
-    private static final String PAYMENT_COMPLETED_TOPIC = "payment_completed";
-    private static final String PAYMENT_OVERDUE_TOPIC = "payment_overdue";
-    private static final String UPCOMING_PAYMENT_REMINDER_TOPIC = "upcoming_payment_reminder";
+    private static final String PAYMENT_COMPLETED_TOPIC = "payment-completed";
+    private static final String PAYMENT_OVERDUE_TOPIC = "payment-overdue";
+    private static final String UPCOMING_PAYMENT_REMINDER_TOPIC = "next-payment";
 
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendPaymentCompletedEvent(PaymentCompletedEvent event) {
-        log.info("Sending PaymentCompletedEvent for paymentId: {}", event.getPaymentId());
+        log.info("Sending PaymentCompletedEvent for paymentId: {}", event.getPaymentPhaseId());
 
         Message<PaymentCompletedEvent> message = MessageBuilder
                 .withPayload(event)
@@ -37,9 +37,9 @@ public class PaymentProducer {
 
         try {
             kafkaTemplate.send(message);
-            log.info("PaymentCompletedEvent sent successfully for paymentId: {}", event.getPaymentId());
+            log.info("PaymentCompletedEvent sent successfully for paymentId: {}", event.getPaymentPhaseId());
         } catch (Exception e) {
-            log.error("Failed to send PaymentCompletedEvent for paymentId: {}", event.getPaymentId(), e);
+            log.error("Failed to send PaymentCompletedEvent for paymentId: {}", event.getPaymentPhaseId(), e);
             throw new RuntimeException("Error while sending PaymentCompletedEvent", e);
         }
     }

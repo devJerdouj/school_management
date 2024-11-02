@@ -6,6 +6,7 @@ import com.example.schoolManagement.dto.PaymentPlanDto;
 import com.example.schoolManagement.groupe.Group;
 import com.example.schoolManagement.groupe.GroupRepository;
 import com.example.schoolManagement.level.LevelService;
+import com.example.schoolManagement.responsible.ResponsibleService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,10 @@ public class StudentService {
     private final LevelService levelService;
 
     public  StudentResponse findById(Long studentId) {
-        return studentRepository.findById(studentId)
+        StudentResponse studentResponse = studentRepository.findById(studentId)
                 .map(studentMapper::toStudentResponse)
-                .orElseThrow(() -> new EntityNotFoundException("Student not found with the ID ::"+ studentId));
-
+                .orElseThrow(() -> new EntityNotFoundException("Student not found with the ID ::" + studentId));
+        return studentResponse;
     }
 
     public  List<StudentResponse> findAll() {

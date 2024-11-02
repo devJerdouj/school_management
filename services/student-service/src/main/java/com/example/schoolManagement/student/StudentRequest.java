@@ -49,6 +49,8 @@ public record StudentRequest(
 
         Long groupId, // Réception de l'ID du Group
 
+        String responsibleFirstname,
+
 
         Long responsibleId , // Réception de l'ID du Responsible
 

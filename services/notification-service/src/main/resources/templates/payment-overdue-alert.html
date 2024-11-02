@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Overdue Alert</title>
+</head>
+<body>
+<div style="font-family: Arial, sans-serif; color: #333;">
+    <h2>Payment Overdue Notice</h2>
+    <p>Dear <span th:text="${fullName}">[Full Name]</span>,</p>
+    <p>We would like to inform you that the payment for the student <span th:text="${studentFullName}">[Student Full Name]</span> is now overdue.</p>
+
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td><strong>Overdue Amount:</strong></td>
+            <td th:text="${amount} + ' USD'">[Amount]</td>
+        </tr>
+        <tr>
+            <td><strong>Due Date:</strong></td>
+            <td th:text="${dueDate}">[Due Date]</td>
+        </tr>
+        <tr>
+            <td><strong>Payment Phase ID:</strong></td>
+            <td th:text="${paymentPhaseId}">[Payment Phase ID]</td>
+        </tr>
+    </table>
+
+    <p>Please make the payment as soon as possible to avoid further late fees.</p>
+
+    <p>If you have any questions or need assistance, please feel free to contact us.</p>
+
+    <p>Best regards,</p>
+    <p>School Administration</p>
+    <p><small>info@school.org</small></p>
+</div>
+</body>
+</html>

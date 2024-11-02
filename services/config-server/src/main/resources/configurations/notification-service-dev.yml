@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-      username: school
-      password: school
+      username: admin
+      password: admin
       host: localhost
       port: 27017
       database: notifications
@@ -15,7 +15,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: '*'
+        spring.json.trusted.packages: 'com.example.eventDto, com.example.notificationservice.entity, *'
         spring.json.type.mapping:
           PaymentCompletedEvent:com.example.notificationservice.entity.PaymentCompletedEvent,
           NextPaymentAlert:com.example.notificationservice.entity.NextPaymentAlert,

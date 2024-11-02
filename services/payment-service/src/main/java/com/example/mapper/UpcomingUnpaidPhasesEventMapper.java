@@ -22,7 +22,7 @@ public class UpcomingUnpaidPhasesEventMapper {
                 studentServiceClient.findStudentByID(paymentPhase.getStudentId()).firstName(),
                 studentServiceClient.findStudentByID(paymentPhase.getStudentId()).lastName(),
                 studentServiceClient.findStudentByID(paymentPhase.getStudentId()).responsibleFirstname(),
-                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).responsibleEmail(),
+                studentServiceClient.findStudentByID(paymentPhase.getStudentId()).email(),
                 paymentPhase.getRemainingAmount(),
                 paymentPhase.getDueDate()
                 );

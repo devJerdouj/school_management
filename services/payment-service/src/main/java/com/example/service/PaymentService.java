@@ -85,16 +85,19 @@ public class PaymentService {
 
             paymentRepository.save(payment);
 
+            System.out.println(nextUnpaidPaymentPhase);
+
+            paymentProducer.sendPaymentCompletedEvent(new PaymentCompletedEvent(unpaidPhase.getPaymentPhaseId(),studentDto.code(),
+                    studentDto.firstName(), studentDto.lastName(), studentDto.responsibleFirstname(),
+                    studentDto.responsibleEmail(), paymentRequest.getPaymentMethod(),
+                    payment.getAmount(), payment.getPaymentDate()));
+
             if (amountToPay > 0) {
                 nextUnpaidPaymentPhase =
                         paymentPhaseService.getNextUnpaidPaymentPhaseByStudentId(studentId);
                 paymentPlan = paymentPlanRepository.findById(nextUnpaidPaymentPhase.getPaymentPlanId()).get();
                 unpaidPhase = PaymentPhaseMapper.toEntity(nextUnpaidPaymentPhase, paymentPlan);
             }
-            paymentProducer.sendPaymentCompletedEvent(new PaymentCompletedEvent(payment.getPaymentId(),studentDto.code(),
-                    studentDto.firstName(), studentDto.lastName(), studentDto.responsibleFirstname(),
-                    studentDto.responsibleEmail(), paymentRequest.getPaymentMethod(),
-                    payment.getAmount(), payment.getPaymentDate()));
 
         }
 

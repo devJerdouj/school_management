@@ -47,6 +47,7 @@ public class StudentController {
                 request.birthDate(),
                 request.levelId(),
                 request.groupId(),
+                request.responsibleFirstname(),
                 request.responsibleId(),
                 request.paymentPlanId()
         );

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentCompletedEvent {
-    private Long paymentId;
+    private Long paymentPhaseId;
     private String studentCode;
     private String studentFirstname;
     private String studentLastname;

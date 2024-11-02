@@ -41,9 +41,9 @@ public class StudentMapper {
                 student.getFirstName(),
                 student.getLastName(),
                 student.getEmail(),
+                student.getResponsible().getFirstName(),
+                student.getResponsible().getEmail(),
                 student.getCode(),
-                student.getAddress(),
-                student.getNumberPhone(),
                 student.getBirthDate(),
                 student.getPaymentPlanId(),
                 new LevelResponse(student.getLevel().getId(), student.getLevel().getName(),student.getLevel().getTotalCost(),groupMapper.toGroupResponseSet(student.getLevel().getGroups()))

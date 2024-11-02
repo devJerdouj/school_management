@@ -3,7 +3,7 @@ package com.example.notificationservice.entity;
 import java.time.LocalDate;
 
 public record PaymentCompletedEvent(
-        Long PaymentPhaseId,
+        Long paymentPhaseId,
         String studentCode,
         String studentFirstname,
         String studentLastname,

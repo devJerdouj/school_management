@@ -48,7 +48,7 @@ public class EmailService {
         context.setVariables(objects);
         try {
             String htmlTemplate = templateEngine.process(template, context);
-            mimeMessageHelper.setText(template, true);
+            mimeMessageHelper.setText(htmlTemplate, true);
             mimeMessageHelper.setTo(to);
             mailSender.send(mimeMessage);
             log.info(String.format("INFO - Email successfully sent to %s with template %s ", to, template));
@@ -80,7 +80,7 @@ public class EmailService {
         context.setVariables(objects);
         try {
             String htmlTemplate = templateEngine.process(template, context);
-            mimeMessageHelper.setText(template, true);
+            mimeMessageHelper.setText(htmlTemplate, true);
             mimeMessageHelper.setTo(to);
             mailSender.send(mimeMessage);
             log.info(String.format("INFO - Email successfully sent to %s with template %s ", to, template));
@@ -112,7 +112,7 @@ public class EmailService {
         context.setVariables(objects);
         try {
             String htmlTemplate = templateEngine.process(template, context);
-            mimeMessageHelper.setText(template, true);
+            mimeMessageHelper.setText(htmlTemplate, true);
             mimeMessageHelper.setTo(to);
             mailSender.send(mimeMessage);
             log.info(String.format("INFO - Email successfully sent to %s with template %s ", to, template));
